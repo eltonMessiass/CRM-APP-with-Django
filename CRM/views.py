@@ -65,3 +65,26 @@ def CreateRecord(request):
     else:
         return redirect('home')
     
+
+def costumer_record(request, pk):
+
+    if request.user.is_authenticated:
+        c_record = Record.objects.get(id=pk)
+        return render(request, "website/record.html", {'c_record':c_record})
+    else:
+        return redirect('home')
+    
+
+def edit_record(request, pk):
+
+    if request.user.is_authenticated:
+        
+        record = Record.objects.get(id=pk)
+
+        form = AddRecordForm(request.POST or None, instance=record)
+        if form.is_valid():
+            form.save()
+            return redirect('home')
+        return render(request, 'website/update_record.html', {'form':form})
+    else:
+        return redirect('home')
