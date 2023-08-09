@@ -2,12 +2,13 @@ from django.shortcuts import render,redirect
 from django.contrib.auth import authenticate, login as auth_login,logout as auth_logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .forms import SignUpForm
+from .forms import SignUpForm, AddRecordForm
+from .models import Record
 # Create your views here.
 
 
 def home(request):
-
+    records = Record.objects.all()
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
@@ -21,7 +22,7 @@ def home(request):
            messages.success(request, "There was an error logging in, please try again") 
            return redirect('home')
     else:
-        return render(request, "website/home.html")
+        return render(request, "website/home.html",{'records':records})
 
 def login(request):
     pass
@@ -49,3 +50,18 @@ def register_user(request):
         form = SignUpForm()
         return render(request, "website/register.html", {'form': form})
     return render(request, "website/register.html", {'form': form})
+
+
+
+def CreateRecord(request):
+    form = AddRecordForm(request.POST, request.FILES)
+
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            if form.is_valid():
+                form.save()
+                return redirect('home')
+        return render(request, 'website/add_record.html', {'form':form})
+    else:
+        return redirect('home')
+    
