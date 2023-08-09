@@ -38,7 +38,7 @@
     <br/><br/>
     <a href="{% url 'home' %}" class="btn btn-secondary">Back</a>
 
-    <a href="#" class="btn btn-danger">Delete</a>
+    <a href="{% url 'delete-record' c_record.id %}" class="btn btn-danger">Delete</a>
 
     <a href="{% url 'edit-record' c_record.id %}" class="btn btn-primary">Edit Record</a>
 

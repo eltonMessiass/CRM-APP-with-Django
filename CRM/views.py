@@ -88,3 +88,13 @@ def edit_record(request, pk):
         return render(request, 'website/update_record.html', {'form':form})
     else:
         return redirect('home')
+    
+
+def delete_record(request, pk):
+
+    if request.user.is_authenticated:
+        record = Record.objects.get(id=pk)
+        record.delete()
+        return redirect('home')
+    else:
+        return redirect('home')
